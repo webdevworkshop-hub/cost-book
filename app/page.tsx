@@ -1,10 +1,9 @@
-
+import { CostBook } from "@/components/home";
 
 export default function Home() {
   return (
     <div>
-      <h1>Cost Book</h1>
+      <CostBook />
     </div>
-
   );
 }

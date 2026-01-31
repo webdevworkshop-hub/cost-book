@@ -8,7 +8,7 @@ const ProductSchema = new Schema(
     description: String,
     price: Number,
   },
-  { timestamps: true } 
+  { timestamps: true },
 );
 
 export default models.Product || model("Product", ProductSchema);

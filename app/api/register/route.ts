@@ -22,3 +22,9 @@ export async function POST(req: Request) {
 
   return Response.json({ message: "User registered successfully" });
 }
+
+export async function GET() {
+  await connectDB();
+  const users = await User.find();
+  return Response.json(users);
+}
