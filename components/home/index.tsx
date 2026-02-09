@@ -3,9 +3,8 @@ import { useUser } from "@/lib/query/auth";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { ProductTable } from "./product/product-table";
-import { Button } from "../ui/button";
-import { ProductFormDialogWrapper } from "./product/product-form-dialog";
+
+import ProductGroup from "./product-group";
 
 export const CostBook = () => {
   const router = useRouter();
@@ -29,10 +28,8 @@ export const CostBook = () => {
     <div className="p-4 max-w-7xl mx-auto space-y-4">
       <h1 className="text-2xl font-bold">Cost Book</h1>
       <p className="text-sm text-gray-500">Welcome {user?.data?.name}</p>
-      <ProductFormDialogWrapper mode="create">
-        <Button>Add Product</Button>
-      </ProductFormDialogWrapper>
-      <ProductTable />
+
+      <ProductGroup />
     </div>
   );
 };

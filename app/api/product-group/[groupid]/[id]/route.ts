@@ -1,11 +1,12 @@
 import { connectDB } from "@/lib/db";
 import Product from "@/models/Product";
-import { getAuthUser } from "../../auth/auth-token";
+import { getAuthUser } from "../../../auth/auth-token";
+import type { NextRequest } from "next/server";
 
 /* UPDATE PRODUCT */
 export async function PUT(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
 
@@ -23,6 +24,8 @@ export async function PUT(
       name: body.name,
       description: body.description,
       price: body.price,
+      quantity: body.quantity,
+      totalAmount: body.price * body.quantity,
     },
     { new: true },
   );
@@ -38,7 +41,7 @@ export async function PUT(
 }
 /* DELETE PRODUCT */
 export async function DELETE(
-  _: Request,
+  _: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;

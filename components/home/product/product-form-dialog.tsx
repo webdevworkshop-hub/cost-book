@@ -28,11 +28,13 @@ import {
 } from "@/lib/query/product";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useParams } from "next/navigation";
 
 const productSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   price: z.number().min(1, { message: "Price is required" }),
   description: z.string().optional(),
+  quantity: z.number().min(1, { message: "Quantity is required" }),
 });
 
 export type ProductFormValues = z.infer<typeof productSchema>;
@@ -46,6 +48,8 @@ export const ProductFormDialogWrapper = ({
   mode?: "create" | "edit";
   product?: Product;
 }) => {
+  const { id } = useParams();
+
   const [open, setOpen] = useState(false);
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
@@ -53,11 +57,15 @@ export const ProductFormDialogWrapper = ({
       name: product?.name || "",
       price: product?.price || 0,
       description: product?.description || "",
+      quantity: product?.quantity || 0,
     },
   });
 
-  const { mutate: createProduct, isPending: isCreating } = useCreateProduct();
+  const { mutate: createProduct, isPending: isCreating } = useCreateProduct(
+    id as string,
+  );
   const { mutate: updateProduct, isPending: isUpdating } = useUpdateProduct(
+    id as string,
     product?._id || "",
   );
 
@@ -98,24 +106,44 @@ export const ProductFormDialogWrapper = ({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Price</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      {...field}
-                      placeholder="Enter Price"
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        placeholder="Enter Price"
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="quantity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Quantity</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        placeholder="Enter Quantity"
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
               name="description"

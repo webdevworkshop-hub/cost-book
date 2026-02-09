@@ -20,14 +20,27 @@ export const productColumns: ColumnDef<Product>[] = [
     },
   },
   {
+    header: "Quantity",
+    accessorKey: "quantity",
+  },
+  {
     header: "Price",
     accessorKey: "price",
+  },
+  {
+    header: "Total Amount",
+    accessorKey: "totalAmount",
   },
   {
     header: "Actions",
     id: "actions",
     cell: ({ row }) => {
-      return <ProductTableActions product={row.original} />;
+      return (
+        <ProductTableActions
+          product={row.original}
+          groupid={row.original.productGroupId}
+        />
+      );
     },
   },
 ];

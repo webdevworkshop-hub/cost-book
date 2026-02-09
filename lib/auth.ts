@@ -1,10 +1,11 @@
 import User from "@/models/User";
-import type { NextAuthOptions } from "next-auth";
 import bcrypt from "bcryptjs";
 import { connectDB } from "./db";
 import CredentialsProvider from "next-auth/providers/credentials";
+import type { JWT } from "next-auth/jwt";
+import type { Session } from "next-auth";
 
-export const authOptions: NextAuthOptions = {
+export const authOptions = {
   session: { strategy: "jwt" },
 
   providers: [
@@ -21,7 +22,7 @@ export const authOptions: NextAuthOptions = {
         if (!user) throw new Error("User not found");
 
         const isValid = await bcrypt.compare(
-          credentials!.password,
+          credentials?.password || "",
           user.password,
         );
 
@@ -37,11 +38,11 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: JWT; user?: { id: string } }) {
       if (user) token.id = user.id;
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       (session.user as { id?: string }).id = token.id as string;
       return session;
     },

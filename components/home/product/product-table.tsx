@@ -9,13 +9,18 @@ import { Button } from "@/components/ui/button";
 import { Edit2, Trash2 } from "lucide-react";
 import { ProductFormDialogWrapper } from "./product-form-dialog";
 
-export const ProductTable = () => {
-  const { data: productResponse, isLoading } = useProducts();
+export const ProductTable = ({ groupid }: { groupid: string }) => {
+  const { data: productResponse, isLoading } = useProducts(groupid);
   const data = productResponse?.data.products || [];
-  const totalAmount = productResponse?.data.totalAmount || 0;
+  const totalAmount = productResponse?.data.productGroupInfo.totalAmount || 0;
   return (
     <div>
-      <h1>Product Table</h1>
+      <h1 className="text-2xl font-medium">
+        Table Name :{" "}
+        <span className="text-primary">
+          {productResponse?.data.productGroupInfo.name}
+        </span>
+      </h1>
 
       <div className="mt-4 shad rounded-md border shadow-sm">
         <DataTable
@@ -34,8 +39,15 @@ export const ProductTable = () => {
   );
 };
 
-export const ProductTableActions = ({ product }: { product: Product }) => {
+export const ProductTableActions = ({
+  product,
+  groupid,
+}: {
+  product: Product;
+  groupid: string;
+}) => {
   const { mutate: deleteProduct, isPending: isDeleting } = useDeleteProduct(
+    groupid,
     product._id,
   );
   return (

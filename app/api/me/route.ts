@@ -23,7 +23,7 @@ export async function GET() {
     const user = await User.findById(decoded.id).select("-password");
 
     return Response.json({ data: user });
-  } catch (err) {
+  } catch {
     return Response.json({ error: "Invalid token" }, { status: 401 });
   }
 }
