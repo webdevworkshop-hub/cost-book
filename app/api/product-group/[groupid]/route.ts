@@ -143,19 +143,31 @@ export async function GET(
   }
 }
 
-/* UPDATE PRODUCT Gr*/
+/* UPDATE PRODUCT GROUP */
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ groupid: string }> },
 ) {
   const { groupid } = await params;
+  const user = await getAuthUser();
+  await connectDB();
   const body = await req.json();
   const productGroup = await ProductGroup.findOneAndUpdate(
-    { _id: groupid },
+    { _id: groupid, userId: user.id },
     body,
     { new: true },
   );
-  return Response.json(productGroup);
+  if (!productGroup) {
+    return Response.json(
+      { isSuccess: false, message: "Product group not found" },
+      { status: 404 },
+    );
+  }
+  return Response.json({
+    isSuccess: true,
+    message: "Product group updated successfully",
+    data: productGroup,
+  });
 }
 
 /* DELETE PRODUCT */
@@ -163,13 +175,23 @@ export async function DELETE(
   _: Request,
   { params }: { params: Promise<{ groupid: string }> },
 ) {
+  const { groupid } = await params;
   const user = await getAuthUser();
   await connectDB();
 
-  const { groupid } = await params;
-  const product = await Product.findOneAndDelete({
+  const productGroup = await ProductGroup.findOneAndDelete({
     _id: groupid,
     userId: user.id,
   });
-  return Response.json(product);
+  if (!productGroup) {
+    return Response.json(
+      { isSuccess: false, message: "Product group not found" },
+      { status: 404 },
+    );
+  }
+  return Response.json({
+    isSuccess: true,
+    message: "Product group deleted successfully",
+    data: productGroup,
+  });
 }

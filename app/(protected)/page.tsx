@@ -1,3 +1,4 @@
+"use client";
 import { CostBook } from "@/components/home";
 
 export default function Home() {

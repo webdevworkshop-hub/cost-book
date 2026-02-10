@@ -104,16 +104,16 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className={cn("border-border-base rounded-md border", className)}>
+    <div className={cn("rounded-md shadow-sm", className)}>
       <Table maxHeight={maxHeight}>
-        <TableHeader className="bg-white">
+        <TableHeader className="bg-card">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="">
               {headerGroup.headers.map((header) => (
                 <TableHead
                   key={header.id}
                   colSpan={header.colSpan}
-                  className="font-medium text-muted-foreground"
+                  className="font-medium text-sm lg:text-base border border-primary "
                 >
                   {header.isPlaceholder
                     ? null
@@ -127,7 +127,7 @@ export function DataTable<TData, TValue>({
           ))}
         </TableHeader>
 
-        <TableBody>
+        <TableBody className="bg-muted">
           {isLoading ? (
             <TableRow>
               <TableCell
@@ -149,7 +149,10 @@ export function DataTable<TData, TValue>({
                   )}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className="text-sm lg:text-base border border-primary/60 rounded-md"
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

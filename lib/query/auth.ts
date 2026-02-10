@@ -41,3 +41,11 @@ export function useUser() {
     },
   });
 }
+
+export function useLogout() {
+  return useMutation({
+    mutationFn: async () => {
+      return api.post<ApiResponse<void>>("/api/logout");
+    },
+  });
+}
